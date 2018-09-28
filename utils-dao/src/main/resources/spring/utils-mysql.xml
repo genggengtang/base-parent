@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:jee="http://www.springframework.org/schema/jee"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/jee
+		http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+        ">    
+	
+	<bean id= "utilsSessionFactory" class= "org.mybatis.spring.SqlSessionFactoryBean" >
+        <property name ="dataSource" ref="utilsDataSource" />
+        <property name ="typeAliasesPackage" value= "com.uulead.utils.dao.model" />
+        <property name ="mapperLocations" value= "classpath*:mapper/*.xml" />
+    </bean>
+    
+    <bean id="utilsSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+	    <constructor-arg index="0" ref="utilsSessionFactory" />
+	</bean>
+	
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.uulead.utils.dao.interf" />  
+        <property name="sqlSessionTemplateBeanName" value="utilsSessionTemplate" />  
+    </bean> 
+	
+	<beans profile="production">
+		<bean id="utilsDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+	         <property name="jndiName">
+	              <value>java:comp/env/jndi/dbutils</value>
+	         </property>
+	     </bean>
+	</beans>
+	
+	<beans profile="test">
+		<bean id="utilsDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+			destroy-method="close">
+			<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+			<property name="url"
+				value="jdbc:mysql://localhost:3306/utils?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;autoReconnectForPools=true" />
+			<property name="username" value="jiuyu" />
+			<property name="password" value="admin" />
+		</bean>
+	</beans>
+
+	<!-- 配置事务异常封装 -->
+   <!-- <bean id="persistenceExceptionTranslationPostProcessor" 
+       class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" /> -->
+</beans>
