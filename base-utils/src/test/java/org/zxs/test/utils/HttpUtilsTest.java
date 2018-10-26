@@ -15,6 +15,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -78,20 +79,35 @@ public class HttpUtilsTest {
 		
 		Map<String, String> querys = new HashMap<>();
 		querys.put("groupID", "63402");
-		querys.put("shopID", "76133883");
-		querys.put("reportDate", "20180720");
+		querys.put("shopID", "76100208");
+		querys.put("reportDate", "20181016");
 //		querys.put("shopID", "10090088");
 		
 		
 //		HttpResponse response = HttpUtils.doPost("http://202.103.199.210:8070/nnxmgl/foreignrest/nnForeignService/getProjs", "", headers, querys, "");
 			
-		HttpResponse response = HttpUtils.doPost("http://open-api.hualala.com/rlj/getPayInfoByReportDate", "", headers, querys, "");
+//		HttpResponse response = HttpUtils.doPost("http://open-api.hualala.com/rlj/getPayInfoByReportDate", "", headers, querys, "");
 		
+		HttpResponse response = HttpUtils.doPost("http://open-api.hualala.com/rlj/getOrderFoodAndPayInfoByReportDate", "", headers, querys, "");
 		
 //		HttpResponse response = HttpUtils.doGet("http://202.103.199.210:8070/nnxmgl/foreignrest/nnForeignService", "/getProjCount", headers, querys);
 		System.out.println(EntityUtils.toString(response.getEntity()));
 //		System.out.println(response);
 		
+	}
+	
+	@Test
+	public void testImpPost() throws Exception{
+		Map<String, String> headers = new HashMap<>();
+		headers.put("Authorization", "443fe2a0907f4492969280ada38e835c");
+		
+		Map<String, String> querys = new HashMap<>();
+		querys.put("cardLevel", "2");
+			
+		HttpResponse response = HttpUtils.doPost("http://10.18.104.146:8911/imp-task-web/card-task-page", "", headers, querys, "");
+		
+		System.out.println(EntityUtils.toString(response.getEntity()));
+		System.out.println(response);
 	}
 	
 	@Test
@@ -218,7 +234,7 @@ public class HttpUtilsTest {
 		Scheme sch = PowerMockito.mock(Scheme.class);
 		PowerMockito.whenNew(Scheme.class).withAnyArguments().thenReturn(sch);
 	//--
-		HttpResponse httpResponse = PowerMockito.mock(HttpResponse.class);
+		CloseableHttpResponse httpResponse = PowerMockito.mock(CloseableHttpResponse.class);
 		
 		//HttpUtils.doDelete()
 		HttpDelete request = PowerMockito.mock(HttpDelete.class);
