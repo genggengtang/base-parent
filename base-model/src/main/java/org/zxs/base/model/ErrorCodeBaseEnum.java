@@ -9,6 +9,8 @@ public enum ErrorCodeBaseEnum implements IErrorCode{
 	SUCC(0, "执行成功！"), 
 	UNAUTHORIZED(401, "授权失败！"),
 	PARAM_ILLEGAL(-111, "请求参数不合法！"),
+	RETURN_ERROR(-112, "请求返回出错！"),
+	AUTH_LIMITED(-113, "权限不足！"),
 	USER_ABSENT(-201, "用户不存在！"), 
 	PSW_ERROR(-202, "密码错误！"), 
 	APP_LOGIN_FAIL(-203, "用户登录失败！"),
